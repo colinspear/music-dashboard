@@ -1,0 +1,9 @@
+# spotify account caches
+.cache-colinspear
+.cache-colinspear1
+
+# notebook checkpoints
+.ipynb_checkpoints/
+
+# pychache
+__pycache__/
