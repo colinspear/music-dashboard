@@ -14,6 +14,7 @@ def track_info_df(sp, song_list):
     responses and creates a pandas data frame of its
     characteristics
 
+    :sp: spotipy instantiation
     :song_list: list of dictionaries of track characteristics
     """
     # initiate song dictionary
@@ -80,15 +81,14 @@ def track_info_df(sp, song_list):
             song_dict['liveness'].append(audio_features[0]['liveness'])
             song_dict['valence'].append(audio_features[0]['valence'])
 
-    fave_songs = pd.DataFrame(song_dict)
-    return fave_songs
-    #fave_songs.to_pickle('starred_songs.pkl')
+    return pd.DataFrame(song_dict)
 
 def discover_weekly_track_list(sp, username):
     """Returns list of Discover Weekly song
     characteristics
 
-    :session: authorized spotipy instance
+    :sp: authorized spotipy instance
+    :username: spotify username
     """
     offset = 0
     playlists = []
