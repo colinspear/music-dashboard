@@ -67,9 +67,13 @@ def track_info_df(sp, song_list):
             song_dict['tempo_confidence'].append(audio_analysis['track']['tempo_confidence'])
             song_dict['time_signature'].append(audio_analysis['track']['time_signature'])
             song_dict['time_sig_conf'].append(audio_analysis['track']['time_signature_confidence'])
-            song_dict['key'].append(audio_analysis['track']['key'])
             song_dict['key_confidence'].append(audio_analysis['track']['key_confidence'])
-            song_dict['mode'].append(audio_analysis['track']['mode'])
+            try:
+                song_dict['mode'].append(audio_analysis['track']['mode'])
+                song_dict['key'].append(audio_analysis['track']['key'])
+            except KeyError:
+                song_dict['mode'].append(None)
+                song_dict['key'].append(None)
             song_dict['mode_confidence'].append(audio_analysis['track']['mode_confidence'])
 
             audio_features = sp.audio_features(song_list[i]['track']['id'])

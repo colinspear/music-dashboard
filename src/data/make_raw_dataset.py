@@ -6,6 +6,7 @@ from pathlib import Path
 
 import discover_weekly as dw
 
+print('Downloading Discover Weekly song data...')
 today = datetime.today().strftime('%Y-%m-%d')
 pickle_str = ('data/raw/' + today + '-discover-weekly.pkl')
 pickle_path = Path(__file__).resolve().parent.parent.parent / pickle_str
@@ -31,3 +32,4 @@ all_tracks = dw.collect_and_append_new_dw(username,
 
 all_tracks.to_pickle(pickle_path)
 
+print('Download complete!')
