@@ -112,21 +112,18 @@ def discover_weekly_track_list(sp, username):
 
     return dw_tracks['items']
 
-def collect_and_append_new_dw(username,
-                             client_id,
-                             client_secret,
-                             redirect_uri,
-                             scope):
+def collect_and_append_new_dw(username, client_id, client_secret, 
+            redirect_uri, scope):
     """Collects current Discover Weekly track information
     and appends to previously existing track info
     """
 
     token = util.prompt_for_user_token(
-    username=username,
-    scope=scope,
-    client_id=client_id,
-    client_secret=client_secret,
-    redirect_uri=redirect_uri
+        username=username,
+        scope=scope,
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=redirect_uri
     )
 
     # instantiate spotipy
