@@ -61,4 +61,3 @@ def related_artists():
 
 with open('data/raw/followed_artists.json', 'w') as fp:
     json.dump(related_artists(), fp, sort_keys=True, indent=4)
-
