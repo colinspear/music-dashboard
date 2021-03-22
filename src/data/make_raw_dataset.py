@@ -19,16 +19,17 @@ load_dotenv(dotenv_path)
 
 username = 'colinspear1'
 scope = 'user-library-read'
-
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
 redirect_uri = os.environ.get("REDIRECT_URI")
 
-all_tracks = dw.collect_and_append_new_dw(username,
-                                         client_id,
-                                         client_secret,
-                                         redirect_uri,
-                                         scope)
+all_tracks = dw.collect_and_append_new_dw(
+    username,
+    client_id,
+    client_secret,
+    redirect_uri,
+    scope
+)
 
 all_tracks.to_pickle(pickle_path)
 

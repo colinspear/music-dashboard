@@ -3,10 +3,10 @@
 
 # import required modules
 import sys
-import spotipy
-import spotipy.util as util
-import pandas as pd
 
+import pandas as pd
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 def track_info_df(sp, song_list):
     """
@@ -118,16 +118,14 @@ def collect_and_append_new_dw(username, client_id, client_secret,
     and appends to previously existing track info
     """
 
-    token = util.prompt_for_user_token(
-        username=username,
-        scope=scope,
-        client_id=client_id,
-        client_secret=client_secret,
-        redirect_uri=redirect_uri
-    )
-
-    # instantiate spotipy
-    sp = spotipy.Spotify(auth=token)
+    sp = spotipy.Spotify(
+        auth_manager = SpotifyOAuth(
+            client_id = client_id,
+            client_secret = client_secret,
+            redirect_uri = redirect_uri,
+            scope = scope
+            )
+        )
 
     current_tracks = discover_weekly_track_list(sp, username)
     current_tracks_df = track_info_df(sp, current_tracks)
