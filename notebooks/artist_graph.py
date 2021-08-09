@@ -45,3 +45,65 @@ G = nx.from_pandas_edgelist(r_graph,
 # %%
 nx.draw_networkx(G, with_labels=False, node_size=10, width=0.5)
 # %%
+# I think this looks like a Small world network. Check properties to see how well it conforms or not
+
+# create a graph from the full artist sample
+G = nx.from_pandas_edgelist(
+    r, 
+    source='artist',
+    target='related_artist',
+    # edge_attr='followers',
+    # create_using=nx.DiGraph()
+)
+
+# calculate clustering coefficient
+c = nx.average_clustering(G)
+
+# the full graph is not actually connected. In order to calculate shortest
+# path, we need a connected graph. There are twelve sub-graphs, one of which
+# is much larger than the others. I will just use the largest subgraph
+
+l = nx.average_shortest_path_length(G)
+# %%
+for i, C in enumerate((G.subgraph(c).copy() for c in nx.connected_components(G))):
+    print(i, nx.average_shortest_path_length(C))
+# %%
+# so there is actually a built in function to test small-worldness in NetworkX.
+# It might be fun to do the calculation myself and compare it to the results of
+# built in. The built in is making my machine work... (didn't finish)
+# nx.sigma(G)
+# nx.omega(G)
+# %%
+largest_cc = max(nx.connected_components(G), key=len)
+S = G.subgraph(largest_cc)
+# %%
+print(G.number_of_nodes())
+print(S.number_of_nodes())
+# %%
+R = nx.random_reference(S)
+# %%
+L = nx.lattice_reference(S)
+# %%
+
+l = nx.average_shortest_path_length(S)
+l_r = nx.average_shortest_path_length(R)
+l_l = nx.average_shortest_path_length(L)
+# %%
+c = nx.average_clustering(S)
+c_r = nx.average_clustering(R)
+c_l = nx.average_clustering(L)
+
+# %%
+s = (c / c_r) / (l / l_r)
+s
+# %%
+o = (l_r / l) - (c / c_l)
+o
+# %%
+swi = ((l - l_l) / (l_r - l_l)) / ((c - c_r) / (c_l - c_r))
+swi
+# %%
+s2 = nx.sigma(S)
+# %%
+o2 = nx.omega(S)
+# %%
