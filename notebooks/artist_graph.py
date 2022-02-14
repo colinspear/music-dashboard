@@ -103,7 +103,13 @@ o
 swi = ((l - l_l) / (l_r - l_l)) / ((c - c_r) / (c_l - c_r))
 swi
 # %%
-s2 = nx.sigma(S)
+nx.degree_assortativity_coefficient(G)
+
 # %%
-o2 = nx.omega(S)
+l
 # %%
+c
+# %%
+nx.density(G)
+# %%
+nx.degree
