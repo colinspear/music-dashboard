@@ -2,27 +2,34 @@ import os
 import pickle
 from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
+from datetime import datetime
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 data_dir = Path('../../data/raw/recently_played')
 
+now = datetime.now().strftime('%Y-%m-%d-%H%M%S')
+print(f'{now}: start download')
+
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
-with open('after.pkl', 'wb') as h:
-    after = pickle.load(h)
+# with open(data_dir / 'after.pkl', 'rb') as h:
+#     after = pickle.load(h)
+
+with open(data_dir / 'after.pkl', 'rb') as h:
+    p = pickle.load(h)
 
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
 redirect_uri = os.environ.get("REDIRECT_URI")
-# username = 'colinspear1'
+username = 'colinspear1'
 scope = 'user-read-recently-played' #, 'user-read-playback-position', 'user-read-playback-state', 'user-read-currently-playing', 'user-library-read']
-
 
 sp = spotipy.Spotify(
     auth_manager = SpotifyOAuth(
+        # username=username,
         client_id = client_id,
         client_secret = client_secret,
         redirect_uri = redirect_uri,
@@ -30,14 +37,17 @@ sp = spotipy.Spotify(
         )
     )
 
-data = sp.current_user_recently_played()
-with open('data.pkl', 'wb') as h:
-    pickle.dump(data, h, protocol=pickle.HIGHEST_PROTOCOL)
+data = sp.current_user_recently_played( )
+with open(data_dir / f'{now}-recently_played.pkl', 'wb') as h:
+    pickle.dump(data, h)
 
 after = data['cursors']['after']
 
-with open('after.pkl', 'wb') as h:
-    pickle.dump(after, h, protocol=pickle.HIGHEST_PROTOCOL)
+with open(data_dir / 'after.pkl', 'wb') as h:
+    pickle.dump(after, h)
+
+now = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
+print(f'{now} : download complete. Next download will start after {after}')
 
 # FAILED REQUESTS ATTEMPT
 
