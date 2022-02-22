@@ -10,16 +10,15 @@ from spotipy.oauth2 import SpotifyOAuth
 data_dir = Path('../../data/raw/recently_played')
 
 now = datetime.now().strftime('%Y-%m-%d-%H%M%S')
-print(f'{now}: start download')
+log_now = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
+
+print(f'{log_now} : start download')
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
-# with open(data_dir / 'after.pkl', 'rb') as h:
-#     after = pickle.load(h)
-
 with open(data_dir / 'after.pkl', 'rb') as h:
-    p = pickle.load(h)
+    after = pickle.load(h)
 
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
@@ -37,17 +36,22 @@ sp = spotipy.Spotify(
         )
     )
 
-data = sp.current_user_recently_played( )
-with open(data_dir / f'{now}-recently_played.pkl', 'wb') as h:
-    pickle.dump(data, h)
+data = sp.current_user_recently_played(after=after)
+n = len(data['items'])
 
-after = data['cursors']['after']
+try:
+    after = data['cursors']['after']
+except TypeError:
+    print(f'{log_now} : {n} songs downloaded. Next download will start after {after}') 
 
-with open(data_dir / 'after.pkl', 'wb') as h:
-    pickle.dump(after, h)
+if n > 0: 
+    with open(data_dir / f'{now}-recently_played.pkl', 'wb') as h:
+        pickle.dump(data, h)
 
-now = datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-print(f'{now} : download complete. Next download will start after {after}')
+    with open(data_dir / 'after.pkl', 'wb') as h:
+        pickle.dump(after, h)
+    print(f'{log_now} : {n} songs downloaded. Next download will start after {after}')
+
 
 # FAILED REQUESTS ATTEMPT
 
