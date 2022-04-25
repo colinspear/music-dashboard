@@ -1,4 +1,3 @@
-# src/data/dotenv_example.py
 import os
 from dotenv import load_dotenv, find_dotenv
 from datetime import datetime
@@ -8,7 +7,7 @@ import discover_weekly as dw
 
 print('Downloading Discover Weekly song data...')
 today = datetime.today().strftime('%Y-%m-%d')
-pickle_str = ('data/raw/' + today + '-discover-weekly.pkl')
+pickle_str = ('data/raw/discover-weekly.pkl' + today + '-discover-weekly.pkl')
 pickle_path = Path(__file__).resolve().parent.parent.parent / pickle_str
 
 # find .env automagically by walking up directories until it's found
