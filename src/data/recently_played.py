@@ -17,8 +17,11 @@ print(f'{log_now} : start download')
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
-with open(data_dir / 'after.pkl', 'rb') as h:
-    after = pickle.load(h)
+try:
+    with open(data_dir / 'after.pkl', 'rb') as h:
+        after = pickle.load(h)
+except FileNotFoundError:
+    print(f'Could not find {data_dir}. Proceeding without after timestamp')
 
 client_id = os.environ.get("CLIENT_ID")
 client_secret = os.environ.get("CLIENT_SECRET")
@@ -36,7 +39,12 @@ sp = spotipy.Spotify(
         )
     )
 
-data = sp.current_user_recently_played(after=after)
+try:
+    data = sp.current_user_recently_played(after=after)
+except NameError:
+    print('No after date found. Proceeding without after timestamp.')
+    data = sp.current_user_recently_played()
+
 n = len(data['items'])
 
 try:
