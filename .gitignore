@@ -95,3 +95,5 @@ target/
 # Mypy cache
 .mypy_cache/
 .env-bash
+.gitkeep
+*.png
